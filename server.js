@@ -6,7 +6,7 @@ import express from "express";
 const app = express();
 import morgan from "morgan";
 import mongoose from 'mongoose';
-
+import cookieParser from 'cookie-parser';
 
 //  custom imports
 
@@ -22,8 +22,8 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 
-
-// app.use(morgan('dev')); // this is printing the request for the 2nd time therefore commented out.
+// this will compare cookies
+app.use(cookieParser());
 app.use(express.json());
 
 
