@@ -6,10 +6,11 @@ import { StatusCodes } from 'http-status-codes';
 
 // let jobs = [
 //     { id: nanoid(), company: 'apple', position: 'front-end' },
-//     { id: nanoid(), company: 'google', position: 'back-end' }
+//     { id: nanoid(), company: 'dresma', position: 'back-end' }
 // ];
 
 export const getAllJob = async (req, res) => {
+    console.log(req.user);
     const jobs = await Job.find();
     res.status(StatusCodes.OK).json({ jobs });
 }
@@ -23,14 +24,9 @@ export const createJob = async (req, res) => {
 }
 
 export const getJob = async (req, res) => {
-    //const { id } = req.params;
-    // the below code was to find job id in local server
-    // const job = jobs.find((job) => job.id === id);
+
 
     const job = await Job.findById(req.params.id);
-
-    // the below commented code is now being handled by the validate Job middleware
-    // if (!job) throw new NotFoundError(`No job with id ${id}`);
     res.status(StatusCodes.OK).json({ job });
 }
 
