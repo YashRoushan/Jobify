@@ -1,5 +1,5 @@
 import { body, param, validationResult } from 'express-validator';
-import { BadRequestError, NotFoundError } from '../errors/customErrors.js';
+import { BadRequestError, NotFoundError, UnauthorizedError } from '../errors/customErrors.js';
 import { JOB_STATUS, JOB_TYPE } from '../utils/constants.js';
 import mongoose from 'mongoose';
 import Job from '../models/JobModel.js';
@@ -18,6 +18,9 @@ const withValidateErrors = (validateValues) => {
                 if (errorMessages[0].startsWith('No job')) {
                     throw new NotFoundError(errorMessages);
                 }
+                if (errorMessages[0].startsWith('not authorized')) {
+                    throw new UnauthorizedError('not authorized to access this route');
+                }
                 throw new BadRequestError(errorMessages);
             }
             next();
@@ -34,17 +37,17 @@ export const validateJobInput = withValidateErrors([
 ])
 
 export const validateIdParam = withValidateErrors([
-    param('id').custom((value) => {
-        return true;
-    })
-        // with the below line we check if the id is in the mongodb or not
-        .custom(async (value) => {
-            // we will need to do this manually because it is an async function
-            const isValidMongoId = mongoose.Types.ObjectId.isValid(value);
-            if (!isValidMongoId) throw new BadRequestError('invalid MongoDB id');
-            const job = await Job.findById(value);
-            if (!job) throw new NotFoundError(`No job with id ${value}`);
-        })
+    param('id').custom(async (value, { req }) => {
+        // we will need to do this manually because it is an async function
+        const isValidMongoId = mongoose.Types.ObjectId.isValid(value);
+        if (!isValidMongoId) throw new BadRequestError('invalid MongoDB id');
+        const job = await Job.findById(value);
+        if (!job) throw new NotFoundError(`No job with id ${value}`);
+
+        const isAdmin = req.user.role === 'admin';
+        const isOwner = req.user.userId === job.createdBy.toString();
+        if (!isAdmin && !isOwner) throw new UnauthorizedError('not authorized to access this route');
+    }),
 ]);
 
 export const validateRegisterInput = withValidateErrors([
