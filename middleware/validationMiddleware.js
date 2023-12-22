@@ -75,7 +75,7 @@ export const validateUpdateUserInput = withValidateErrors([
     body('email').notEmpty().withMessage('email is required').isEmail().withMessage('invalid email format').custom(async (email, { req }) => {
         const user = await User.findOne({ email });
         if (user && user._id.toString() !== req.user.userId) {
-            throw new Error('email already exists');
+            throw new BadRequestError('email already exists');
         }
     }),
     body('lastName').notEmpty().withMessage('last name is required'),
