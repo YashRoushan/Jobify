@@ -2,10 +2,19 @@ import React from 'react'
 import { Form, redirect, useNavigation, Link } from 'react-router-dom';
 import Wrapper from '../assets/wrappers/RegisterAndLoginPage';
 import { FormRow, Logo } from '../components';
-export const action = async (data) => {
-    console.log('hello there');
-    console.log(data);
-    return null;
+import customFetch from '../utils/customFetch';
+export const action = async ({ request }) => {
+    const formData = await request.formData();
+    const data = Object.fromEntries(formData);
+
+    try {
+        await customFetch.post('/auth/register', data)
+        return null;
+    }
+    catch (error) {
+        console.log("this is an error -> " + error);
+        return error;
+    }
 }
 
 const Register = () => {
