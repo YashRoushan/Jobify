@@ -3,21 +3,29 @@ import { Outlet, redirect, useLoaderData } from 'react-router-dom';
 import Wrapper from '../assets/wrappers/Dashboard';
 import { BigSidebar, Navbar, SmallSidebar } from '../components';
 import { checkDefaultTheme } from '../App';
+import customFetch from '../utils/customFetch';
 
 
-export const loader = () => {
-    return 'Hello World';
+export const loader = async () => {
+    try {
+        const { data } = await customFetch.get('/users/current-user');
+        return data;
+    } catch (error) {
+        // login again if there is an issue with the json web token
+        return redirect('/');
+    }
 }
 const DashboardContext = createContext();
 
 
 
 const DashboardLayout = ({ isDarkThemeEnabled }) => {
-    const data = useLoaderData();
-    console.log(data);
-    // temp
+    // const data = useLoaderData();
+    // console.log(data);
+    const { user } = useLoaderData();
+    // before it was temp user, now it is the actual user
 
-    const user = { name: 'john' }
+
     const [showSidebar, setShowSidebar] = useState(false)
     const [isDarkTheme, setIsDarkTheme] = useState(checkDefaultTheme());
 
@@ -50,7 +58,7 @@ const DashboardLayout = ({ isDarkThemeEnabled }) => {
                     <div>
                         <Navbar />
                         <div className="dashboard-page">
-                            <Outlet />
+                            <Outlet context={{ user }} />
                         </div>
                     </div>
                 </main>
