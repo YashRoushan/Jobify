@@ -2,6 +2,7 @@ import React from 'react';
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { HomeLayout, Landing, Register, Login, DashboardLayout, Error, AddJob, Stats, AllJobs, Profile, Admin } from './pages';
 import { action as registerAction } from './pages/Register';
+import { action as loginAction } from './pages/Login';
 
 
 export const checkDefaultTheme = () => {
@@ -33,6 +34,7 @@ const router = createBrowserRouter([
       {
         path: 'login',
         element: <Login />,
+        action: loginAction,
       },
       {
         path: 'dashboard',
