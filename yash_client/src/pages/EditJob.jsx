@@ -9,8 +9,14 @@ import customFetch from "../utils/customFetch";
 
 
 export const loader = async ({ params }) => {
-    console.log(params);
-    return null;
+    try {
+        const { data } = await customFetch.get(`/jobs/${params.id}`);
+        toast.success('job edited!');
+        return data;
+    } catch (error) {
+        toast.error(error?.response?.data?.msg || 'error!');
+        return redirect('/dashboard/all-jobs');
+    }
 }
 
 export const action = async () => {
@@ -18,8 +24,8 @@ export const action = async () => {
     return null;
 }
 const EditJob = () => {
-    const params = useParams();
-    console.log(params);
+    const { job } = useLoaderData();
+    console.log(job);
     return <h1>edit job</h1>
 }
 
