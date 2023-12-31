@@ -1,6 +1,6 @@
 import React from 'react';
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import { HomeLayout, Landing, Register, Login, DashboardLayout, Error, AddJob, Stats, AllJobs, Profile, Admin } from './pages';
+import { HomeLayout, Landing, Register, Login, DashboardLayout, Error, AddJob, Stats, AllJobs, Profile, Admin, EditJob } from './pages';
 import { action as registerAction } from './pages/Register';
 import { action as loginAction } from './pages/Login';
 import { action as addJobAction } from './pages/AddJob';
@@ -64,6 +64,10 @@ const router = createBrowserRouter([
           {
             path: 'admin',
             element: <Admin />
+          },
+          {
+            path: 'edit-job/:id',
+            element: <EditJob />
           },
         ]
       },
