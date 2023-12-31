@@ -7,7 +7,7 @@ import day from "dayjs";
 import advancedFormat from "dayjs/plugin/advancedFormat";
 day.extend(advancedFormat);
 
-const Job = ({ __id, position, company, jobLocation, jobType, createdAt, jobStatus }) => {
+const Job = ({ _id, position, company, jobLocation, jobType, createdAt, jobStatus }) => {
     const date = day(createdAt).format('MMM Do, YYYY');
     return (<Wrapper>
         <header>
@@ -29,7 +29,7 @@ const Job = ({ __id, position, company, jobLocation, jobType, createdAt, jobStat
                 </div>
             </div>
             <footer className='actions'>
-                <Link className='btn edit-btn'>Edit</Link>
+                <Link to={`../edit-job/${_id}`} className='btn edit-btn'>Edit</Link>
                 <Form>
                     <button type='submit' className='btn delete-btn'>
                         Delete
