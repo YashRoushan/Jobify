@@ -1,11 +1,14 @@
 import React from 'react';
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { HomeLayout, Landing, Register, Login, DashboardLayout, Error, AddJob, Stats, AllJobs, Profile, Admin, EditJob } from './pages';
+// when using the customFetch, use action
 import { action as registerAction } from './pages/Register';
 import { action as loginAction } from './pages/Login';
 import { action as addJobAction } from './pages/AddJob';
 import { loader as dashboardLoader } from './pages/DashboardLayout';
 import { loader as allJobsLoader } from './pages/AllJobs';
+import { loader as editJobLoader } from './pages/EditJob';
+import { action as editJobAction } from './pages/EditJob';
 
 export const checkDefaultTheme = () => {
   const isDarkTheme = localStorage.getItem('darkTheme') === 'true';
@@ -67,7 +70,9 @@ const router = createBrowserRouter([
           },
           {
             path: 'edit-job/:id',
-            element: <EditJob />
+            element: <EditJob />,
+            loader: editJobLoader,
+            action: editJobAction,
           },
         ]
       },
