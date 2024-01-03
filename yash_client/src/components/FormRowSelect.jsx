@@ -7,7 +7,12 @@ const FormRowSelect = ({ name, labelText, list, defaultValue }) => {
             <label htmlFor={name} className='form-label'>
                 {labelText || name}
             </label>
-            <select htmlFor={name} className='form-select' defaultValue={defaultValue || ''}>
+            <select
+                htmlFor={name}
+                className='form-select'
+                defaultValue={defaultValue || ''}
+                name={name}
+            >
                 {list.map((itemValue) => {
                     return <option value={itemValue} key={itemValue}>
                         {itemValue}
