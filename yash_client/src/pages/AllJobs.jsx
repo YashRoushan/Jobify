@@ -6,10 +6,17 @@ import { useLoaderData } from "react-router-dom";
 import { useContext, createContext } from "react";
 
 
-export const loader = async () => {
-    console.log('Hello');
+export const loader = async ({ request }) => {
+    console.log(request.url);
+    const params = Object.fromEntries([
+        ...new URL(request.url).searchParams.entries(),
+    ]);
+    console.log(params);
     try {
-        const { data } = await customFetch.get('/jobs');
+        // you will only get the jobs with matching params via axios if you put it alongside the url
+        const { data } = await customFetch.get('/jobs', {
+            params,
+        });
         return { data };
     } catch (error) {
         toast.error(error?.response?.data?.msg);
