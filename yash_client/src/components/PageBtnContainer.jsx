@@ -24,6 +24,82 @@ const PageBtnContainer = () => {
         navigate(`${pathname}?${searchParams.toString()}`);
     }
 
+    const addPageButton = ({ pageNumber, activeClass }) => {
+        return (
+            <button
+                className={`btn page-btn ${activeClass && 'active'}`}
+                key={pageNumber}
+                onClick={() => handlePageChange(pageNumber)}
+            >
+                {pageNumber}
+            </button>
+        );
+    }
+
+    const renderPageButtons = () => {
+        const pageButtons = [];
+        // first page
+        pageButtons.push(
+            addPageButton({
+                pageNumber: 1,
+                activeClass: currentPage === 1
+            })
+        );
+
+        // dot before 
+        if (currentPage > 3) {
+            pageButtons.push(<span className='page-btn dots' key="dots-1">
+                ...
+            </span>)
+        }
+
+        // one before current page
+        if (currentPage !== 1 && currentPage !== 2) {
+            pageButtons.push(
+                addPageButton({
+                    pageNumber: currentPage - 1,
+                    activeClass: false
+                })
+            );
+        }
+        // current page
+        if (currentPage !== 1 && currentPage !== numOfPages) {
+            pageButtons.push(
+                addPageButton({
+                    pageNumber: currentPage,
+                    activeClass: true
+                })
+            );
+        }
+
+        // one after current page
+        if (currentPage !== numOfPages && currentPage !== numOfPages - 1) {
+            pageButtons.push(
+                addPageButton({
+                    pageNumber: currentPage + 1,
+                    activeClass: false
+                })
+            );
+        }
+
+        // dot after 
+        if (currentPage < numOfPages - 2) {
+            pageButtons.push(
+                <span className='page-btn dots' key="dots+1">
+                    ...
+                </span>
+            )
+        }
+
+        pageButtons.push(
+            addPageButton({
+                pageNumber: numOfPages,
+                activeClass: currentPage === numOfPages
+            })
+        );
+        return pageButtons;
+    }
+
     return <Wrapper>
         <button className='btn prev-btn' onClick={() => {
             let prevPage = currentPage - 1;
@@ -34,15 +110,7 @@ const PageBtnContainer = () => {
             prev
         </button>
         <div className="btn-container">
-            {pages.map((pageNumber) => {
-                return <button
-                    className={`btn page-btn ${pageNumber === currentPage && 'active'}`}
-                    key={pageNumber}
-                    onClick={() => handlePageChange(pageNumber)}
-                >
-                    {pageNumber}
-                </button>
-            })}
+            {renderPageButtons()}
         </div>
         <button className='btn next-btn' onClick={() => {
             let nextPage = currentPage + 1;
